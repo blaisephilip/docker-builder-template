@@ -1,7 +1,7 @@
 {
   "name": "r4visualizer-frontend",
   "version": "0.0.1",
-  "homepage": "http://r4visualizer.eu-central-1.elasticbeanstalk.com/",
+  "homepage": ".",
   "private": true,
   "dependencies": {
     "@azure/msal-browser": "^3.26.1",
@@ -50,7 +50,9 @@
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
     "test": "jest",
-    "build": "react-scripts build",
+    "build": "GENERATE_SOURCEMAP=false react-scripts build",
+    "clean": "rm -rf node_modules package-lock.json",
+    "install:clean": "npm run clean && npm ci",
     "swagger": "const fs = require('fs'); const spec = require('./src/Swagger.js'); fs.writeFileSync('./src/api/swagger.json', JSON.stringify(spec, null, 2))"
   },
   "eslintConfig": {

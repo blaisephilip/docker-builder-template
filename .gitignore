@@ -25,6 +25,7 @@ src/app-frontend/public
 src/app-frontend/src
 config
 docker-images/
+.npm-cache
 
 # Ignore VS Code settings
 .vscode/settings.json

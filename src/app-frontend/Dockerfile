@@ -1,5 +1,4 @@
 FROM node:lts-slim AS builder
-ENV NODE_ENV=production
 
 # Install git and essential build tools
 RUN apt-get update && apt-get install -y \
@@ -26,22 +25,28 @@ ADD fonts /usr/src/add-frontend/fonts
 ADD public /usr/src/add-frontend/public
 
 COPY .env.production /usr/src/add-frontend
+# Copy the .npmrc file if it exists
+# Check if the .npmrc file exists in the context
+RUN if [ -f ".npmrc" ]; then \
+        echo ".npmrc file found, copying it to the container..."; \
+        COPY .npmrc /usr/src/add-frontend/.npmrc
+    else \
+        echo ".npmrc file not found, skipping copy."; \
+    fi
 
 # Conditional npm install based on .npmrc existence
-ARG NPMRC_EXISTS=0
 RUN if [ -f ".npmrc" ]; then \
         echo "Installing with custom .npmrc..." && \
-        --mount=type=secret,id=npmrc,target=/usr/src/add-frontend/.npmrc npm install --omit=dev --legacy-peer-deps; \
+        --mount=type=secret,id=npmrc,target=/usr/src/add-frontend/.npmrc npm ci --omit=dev --legacy-peer-deps; \
     else \
         echo "Installing without .npmrc..." && \
-        npm install --omit=dev --legacy-peer-deps; \
+        npm ci --prefer-offline --no-audit --no-fund --omit=dev --legacy-peer-deps; \
     fi
 
 # Build for production.
-RUN npm run build -- --prod
+RUN npm run build
 
 FROM node:lts-slim
-ENV NODE_ENV=production
 
 # Set working directory
 WORKDIR /usr/src/add-frontend

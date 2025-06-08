@@ -29,7 +29,7 @@ COPY .env.production /usr/src/add-frontend
 # Check if the .npmrc file exists in the context
 RUN if [ -f ".npmrc" ]; then \
         echo ".npmrc file found, copying it to the container..."; \
-        COPY .npmrc /usr/src/add-frontend/.npmrc
+        COPY .npmrc /usr/src/add-frontend/.npmrc \
     else \
         echo ".npmrc file not found, skipping copy."; \
     fi

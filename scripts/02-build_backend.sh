@@ -27,6 +27,13 @@ GITHUB_PAT=$(cat "${PAT_FILE}")
 # Construct image name
 IMAGE_NAME="ghcr.io/${GITHUB_USER}/${BACKEND_IMAGE_NAME}:${VERSION_BACKEND}"
 
+# Check if buildx is installed
+#if ! docker buildx version > /dev/null 2>&1; then
+#    echo "Error: Docker Buildx is not installed. Please install it first."
+#    echo "Visit: https://docs.docker.com/go/buildx/"
+#    exit 1
+#fi
+
 # Build and push the image
 docker build -f Dockerfile -t "${IMAGE_NAME}" .
 

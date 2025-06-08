@@ -1,0 +1,77 @@
+{
+  "name": "r4visualizer-frontend",
+  "version": "0.0.1",
+  "homepage": "http://r4visualizer.eu-central-1.elasticbeanstalk.com/",
+  "private": true,
+  "dependencies": {
+    "@azure/msal-browser": "^3.26.1",
+    "@azure/msal-react": "^2.1.1",
+    "@babel/plugin-proposal-private-property-in-object": "^7.2.11",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@ibm/plex": "^6.4.1",
+    "@mui/icons-material": "^6.4.4",
+    "@mui/material": "^6.4.4",
+    "@mui/x-tree-view": "^7.26.0",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.7.7",
+    "cors": "^2.8.5",
+    "d3": "^7.9.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "express-session": "^1.18.1",
+    "html2canvas": "^1.4.1",
+    "isomorphic-fetch": "^3.0.0",
+    "jspdf": "^2.5.2",
+    "leaflet": "^1.9.4",
+    "npm-install-peers": "^1.2.2",
+    "passport": "^0.7.0",
+    "passport-windowsauth": "^3.0.1",
+    "polished": "^4.3.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.2.0",
+    "react-leaflet": "^4.2.1",
+    "react-router-dom": "^6.29.0",
+    "react-scripts": "^5.0.1",
+    "reagraph": "^4.21.2",
+    "recharts": "^2.15.1",
+    "sqlite3": "^5.1.7",
+    "styled-components": "^6.1.13",
+    "swagger-ui-dist": "^5.17.14",
+    "swagger-ui-react": "^5.17.14",
+    "uuid": "^9.0.1",
+    "web-vitals": "^2.1.4",
+    "wx-gantt": "github:svar-widgets/gantt",
+    "xlsx": "^0.18.5"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "jest",
+    "build": "react-scripts build",
+    "swagger": "const fs = require('fs'); const spec = require('./src/Swagger.js'); fs.writeFileSync('./src/api/swagger.json', JSON.stringify(spec, null, 2))"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "swagger-jsdoc": "^6.2.8"
+  }
+}

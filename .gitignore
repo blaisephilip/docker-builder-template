@@ -15,12 +15,16 @@
 .properties
 
 bak
-src
+package-lock.json
 # Ignore certificates
 src/app-backend/cert/
 src/app-backend/db
 src/app-backend
+src/app-frontend/fonts
+src/app-frontend/public
+src/app-frontend/src
 config
+docker-images/
 
 # Ignore VS Code settings
 .vscode/settings.json

@@ -21,6 +21,7 @@ cd ../../scripts || exit
 CONFIG=$(cat ../config/docker-config.json)
 GITHUB_USER=$(echo $CONFIG | jq -r '.github_user')
 FRONTEND_IMAGE_NAME=$(echo $CONFIG | jq -r '.frontend_image_name')
+FRONTEND_CONTAINER_NAME=$(echo $CONFIG | jq -r '.frontend_container_name')
 VERSION_FRONTEND=$(echo $CONFIG | jq -r '.version_frontend')
 PAT_FILE=$(echo $CONFIG | jq -r '.pat_file')
 
@@ -29,8 +30,8 @@ cd ../src/app-frontend || exit
 echo "Building frontend docker image..."
 
 # Stop and remove existing containers
-docker ps -a | grep "tool-frontend" | awk '{print $1}' | xargs -r docker stop
-docker ps -a | grep "tool-frontend" | awk '{print $1}' | xargs -r docker rm
+docker ps -a | grep "${FRONTEND_CONTAINER_NAME}" | awk '{print $1}' | xargs -r docker stop
+docker ps -a | grep "${FRONTEND_CONTAINER_NAME}"  | awk '{print $1}' | xargs -r docker rm
 
 # Remove existing images
 docker images | grep "tool-frontend" | awk '{print $3}' | xargs -r docker rmi -f
@@ -83,11 +84,19 @@ docker logout ghcr.io
 cd ../../scripts || exit
 
 
+if [ "$(docker ps -aq -f name=frontend-test)" ]; then
+    echo "Removing existing frontend-test container..."
+    docker stop frontend-test >/dev/null 2>&1
+    docker rm frontend-test >/dev/null 2>&1
+fi
+
 # Launch container for testing
 echo "Starting container for testing..."
 docker run -d \
   -p 3000:3000 \
   --env-file ../src/app-frontend/.env \
+  -e NODE_ENV=development \
+  -e PUBLIC_URL=. \
   --name frontend-test \
   "${IMAGE_NAME}"
 

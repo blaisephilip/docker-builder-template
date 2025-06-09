@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Start time measurement
+START_TIME=$(date +%s)
+
 # Attempt a local npm install to ensure all dependencies are available
 # Change to app-frontend directory
 cd ../src/app-frontend || exit
@@ -42,6 +45,26 @@ GITHUB_PAT=$(cat "${PAT_FILE}")
 # Construct image name
 IMAGE_NAME="ghcr.io/${GITHUB_USER}/${FRONTEND_IMAGE_NAME}:${VERSION_FRONTEND}"
 
+# Remove existing image with same name and tag
+echo "Checking for existing image: ${IMAGE_NAME}"
+if docker image inspect "${IMAGE_NAME}" >/dev/null 2>&1; then
+    echo "Removing existing image: ${IMAGE_NAME}"
+    docker rmi -f "${IMAGE_NAME}" || {
+        echo "Error: Failed to remove existing image"
+        exit 1
+    }
+fi
+
+# Remove dangling images
+echo "Cleaning up dangling images..."
+if docker images -f "dangling=true" -q | grep -q .; then
+    docker rmi $(docker images -f "dangling=true" -q) || {
+        echo "Warning: Could not remove some dangling images"
+    }
+else
+    echo "No dangling images found"
+fi
+
 # Check if buildx is installed
 #if ! docker buildx version > /dev/null 2>&1; then
 #    echo "Error: Docker Buildx is not installed. Please install it first."
@@ -72,6 +95,7 @@ ARCHIVE_PATH=$(echo $CONFIG | jq -r '.docker_img_archive_path')
 ARCHIVE_NAME=$(echo $CONFIG | jq -r '.frontend_img_archive_name')
 mkdir -p "../../$ARCHIVE_PATH"
 # Save and compress the Docker image
+rm -f "../../${ARCHIVE_PATH}/${ARCHIVE_NAME}" 2>/dev/null
 docker save "${IMAGE_NAME}" | gzip > "../../${ARCHIVE_PATH}/${ARCHIVE_NAME}"
 # Confirm archive creation
 echo "Image archived to: ${ARCHIVE_PATH}/${ARCHIVE_NAME}"
@@ -119,6 +143,17 @@ else
     exit 1
 fi
 
+# Calculate and display execution time
+END_TIME=$(date +%s)
+DURATION=$((END_TIME - START_TIME))
+MINUTES=$((DURATION / 60))
+SECONDS=$((DURATION % 60))
+
+echo "----------------------------------------"
+echo "Build script completed in ${MINUTES}m ${SECONDS}s"
+echo "Script finished at $(date '+%Y-%m-%d %H:%M:%S')"
+echo "----------------------------------------"
+
 # Wait for user input before cleanup
 read -p "Press enter to stop the test container..."
 
@@ -126,3 +161,4 @@ read -p "Press enter to stop the test container..."
 docker stop frontend-test
 docker rm frontend-test
 echo "Test container stopped and removed."
+

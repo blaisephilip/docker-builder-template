@@ -63,7 +63,7 @@ RUN npm config set strict-ssl false
 RUN npm install -g serve
 # Expose of port of actual application, and the SSH port for debugging purposes
 
-EXPOSE 3000
+EXPOSE 8000
 
 # Run application
-CMD serve -s build -l 3000 
+CMD serve -s build -l 8000 

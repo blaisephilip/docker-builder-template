@@ -79,7 +79,7 @@ docker buildx create --use
 # Use it like this if custom NPM package sources are needed
 # DOCKER_BUILDKIT=1 docker build -f Dockerfile --secret id=npmrc,src="${HOME}/.npmrc" -t "${IMAGE_NAME}" .
 # If no custom NPM package sources are needed, use the following command
-DOCKER_BUILDKIT=1 docker build -f Dockerfile -t "${IMAGE_NAME}" .
+DOCKER_BUILDKIT=1 docker build --no-cache --force-rm --pull -f Dockerfile -t "${IMAGE_NAME}" .
 
 # Login to GitHub Container Registry
 echo "${GITHUB_PAT}" | docker login ghcr.io -u "${GITHUB_USER}" --password-stdin
@@ -100,13 +100,11 @@ docker save "${IMAGE_NAME}" | gzip > "../../${ARCHIVE_PATH}/${ARCHIVE_NAME}"
 # Confirm archive creation
 echo "Image archived to: ${ARCHIVE_PATH}/${ARCHIVE_NAME}"
 
-
 # Logout from GitHub Container Registry
 docker logout ghcr.io
 
 # Return to scripts directory
 cd ../../scripts || exit
-
 
 if [ "$(docker ps -aq -f name=frontend-test)" ]; then
     echo "Removing existing frontend-test container..."
@@ -117,7 +115,7 @@ fi
 # Launch container for testing
 echo "Starting container for testing..."
 docker run -d \
-  -p 3000:3000 \
+  -p 8000:8000 \
   --env-file ../src/app-frontend/.env \
   -e NODE_ENV=development \
   -e PUBLIC_URL=. \
@@ -129,13 +127,13 @@ sleep 3
 
 # Check if container is running
 if [ "$(docker ps -q -f name=frontend-test)" ]; then
-    echo "Container started successfully on http://localhost:3000"
+    echo "Container started successfully on http://localhost:8000"
     
     # Open in Firefox private window
     if command -v firefox &> /dev/null; then
-        firefox --private-window "http://localhost:3000" &
+        firefox --private-window "http://localhost:8000" &
     else
-        echo "Firefox not found. Please open http://localhost:3000 manually"
+        echo "Firefox not found. Please open http://localhost:8000 manually"
     fi
 else
     echo "Error: Container failed to start"

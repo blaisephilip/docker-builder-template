@@ -37,6 +37,7 @@
     "react-scripts": "^5.0.1",
     "reagraph": "^4.21.2",
     "recharts": "^2.15.1",
+    "serve": "^14.2.4",
     "sqlite3": "^5.1.7",
     "styled-components": "^6.1.13",
     "swagger-ui-dist": "^5.17.14",
@@ -50,7 +51,7 @@
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
     "test": "jest",
-    "build": "GENERATE_SOURCEMAP=false react-scripts build",
+    "build": "GENERATE_SOURCEMAP=true react-scripts build",
     "clean": "rm -rf node_modules package-lock.json",
     "install:clean": "npm run clean && npm ci",
     "swagger": "const fs = require('fs'); const spec = require('./src/Swagger.js'); fs.writeFileSync('./src/api/swagger.json', JSON.stringify(spec, null, 2))"

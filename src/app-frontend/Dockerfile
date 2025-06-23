@@ -44,7 +44,7 @@ RUN if [ -f ".npmrc" ]; then \
     fi
 
 # Build for production.
-RUN npm run build
+RUN npm run build -- --prod
 
 FROM node:lts-slim
 

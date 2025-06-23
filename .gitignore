@@ -20,10 +20,8 @@ package-lock.json
 src/app-backend/cert/
 src/app-backend/db
 src/app-backend
-src/app-frontend/fonts
-src/app-frontend/public
-src/app-frontend/src
-config
+src/app-frontend/public/api
+config/docker-config.json
 docker-images/
 .npm-cache
 

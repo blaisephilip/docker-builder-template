@@ -2,30 +2,48 @@
 
 ## Concept
 
+The use case of building containerized applications with front- and backend is regular.  
+The repository provides a template about how to do this, with aspects of content integration from many sources.  
+
+## Prerequisites
+
+- Linux as OS (tested on Ubuntu 24.04.1)
+- Prepared sotware environment. Use the following script:  
+
+```bash
+cd scripts
+./00-setup-environment.sh
+```
+
 ## Architecture
 
-**TODO - add links**  
+The system provides a basic frontend-backend web application architecture without any database used.  
 
-Create a docker-config.json file in the config folder. Example content:  
+### Frontend - Node.js
 
-```json
-{
-    "github_user": "blaisephilip",
-    "backend_image_name": "tool-backend",
-    "backend_container_name": "tool-backend-container",
-    "backend_img_archive_path": "docker-images/tool-backend.tar.gz",
-    "frontend_image_name": "tool-frontend",
-    "frontend_container_name": "tool-frontend-container",
-    "frontend_img_archive_path": "docker-images/tool-frontend.tar.gz",
-    "version_backend": "V0.0.1",
-    "version_frontend": "V0.0.1",
-    "pat_file": "/home/blaise/.github-docker-img-pat"
-}
+#### .env files
+
+Attributes with direct environment-based influence can be added here to the build.
+
+#### .npmrc
+
+Private or company-specific NPM package sources can be provided here for the build.  
+
+## Build
+
+The builder scripts:
+
+```bash
+cd scripts
+./01-build-frontend.sh
+```
+
+```bash
+cd scripts
+./02-build-backend.sh
 ```
 
 ## Modules
-
-**TODO**  
 
 ## Releases
 
